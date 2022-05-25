@@ -1,0 +1,17 @@
+pipelines:
+  branches:
+    production:
+      - step:
+          name: Copy files to cloud
+          script:
+            - ssh root@178.128.197.67 "mkdir -p ../public/ipit-app-server"
+            - scp -r ./* root@178.128.197.67:../public/ipit-app-server
+      - step:
+          name: Install dependencies
+          script:
+            - ssh root@178.128.197.67 "cd ../public/ipit-app-server;  npm install"
+      - step:
+          name: Build production and run
+          deployment: Production
+          script:
+            - ssh root@178.128.197.67 "cd ../public/ipit-app-server;  npm run build; npm run start:prod"
